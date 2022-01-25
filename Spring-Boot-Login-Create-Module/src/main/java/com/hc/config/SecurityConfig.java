@@ -23,12 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(patientDetailsService);
-    }
+        /*.inMemoryAuthentication()
+        .withUser("user").password("password").roles("USER");*/}
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+    	/*  http.httpBasic().disable();*/
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/patient/join").permitAll().and().authorizeRequests()
+        http.authorizeRequests().antMatchers("/patient/signup").permitAll().and().authorizeRequests()
                 .antMatchers("/patient/**","/appointment/**").authenticated().and().httpBasic();
     }
 

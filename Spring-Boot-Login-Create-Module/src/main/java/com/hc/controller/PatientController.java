@@ -42,7 +42,7 @@ public class PatientController {
     //If loggedin user is NURSE -> NURSE OR DOCTOR
     //If loggedin user is DOCTOR -> DOCTOR
 
-    @GetMapping("/access/{userId}/{userRole}")
+    @GetMapping("/access/{userId}/{patientRole}")
     @PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
     public String giveAccessToUser(@PathVariable int userId, @PathVariable String patientRole, Principal principal) {
         Patient patient = repository.findById(userId).get();

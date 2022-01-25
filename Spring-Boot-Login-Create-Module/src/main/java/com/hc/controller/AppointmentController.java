@@ -33,7 +33,7 @@ public class AppointmentController {
         return principal.getName() + " Your Appointment created successfully , Required Nurse/Doctor Action !";
     }
 
-    @GetMapping("/approveAppointment/{appointmentId}")
+    @GetMapping("/approveAppointment/{appointId}")
     @PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
     public String approveApoint(@PathVariable int appointId) {
         Appointment apmnt = apmntRepository.findById(appointId).get();
@@ -52,7 +52,7 @@ public class AppointmentController {
         return "Approved all Appointments !";
     }
 
-    @GetMapping("/removeAppointment/{appointmentId}")
+    @GetMapping("/removeAppointment/{appointId}")
     @PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
     public String removeAppointment(@PathVariable int appointId) {
         Appointment apmnt = apmntRepository.findById(appointId).get();
