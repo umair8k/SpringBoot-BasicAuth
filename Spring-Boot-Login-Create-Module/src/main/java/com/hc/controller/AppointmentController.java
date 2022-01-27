@@ -61,7 +61,7 @@ public class AppointmentController {
 		return "Approved all Appointments !";
 	}
 
-	@GetMapping("/removeAppointment/{appointId}")
+	@GetMapping("/rejectAppointment/{appointId}")
 	@PreAuthorize("hasAuthority('ROLE_DOCTOR')")
 	public String removeAppointment(@PathVariable int appointId) {
 		Appointment apmnt = apmntRepository.findById(appointId).get();
