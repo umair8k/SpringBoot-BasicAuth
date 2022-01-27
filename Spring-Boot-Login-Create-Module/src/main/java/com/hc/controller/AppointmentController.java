@@ -43,7 +43,7 @@ public class AppointmentController {
 	}
 
 	@GetMapping("/approveAppointment/{appointId}")
-	@PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
+	@PreAuthorize("hasAuthority('ROLE_DOCTOR')")
 	public String approveApoint(@PathVariable int appointId) {
 		Appointment apmnt = apmntRepository.findById(appointId).get();
 		apmnt.setStatus(AppointmentStatus.APPROVED);
@@ -52,7 +52,7 @@ public class AppointmentController {
 	}
 
 	@GetMapping("/approveAll")
-	@PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
+	@PreAuthorize("hasAuthority('ROLE_DOCTOR')")
 	public String approveAll() {
 		apmntRepository.findAll().stream().filter(appointment -> appointment.getStatus().equals(AppointmentStatus.PENDING)).forEach(appointment -> {
 			appointment.setStatus(AppointmentStatus.APPROVED);
@@ -62,7 +62,7 @@ public class AppointmentController {
 	}
 
 	@GetMapping("/removeAppointment/{appointId}")
-	@PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
+	@PreAuthorize("hasAuthority('ROLE_DOCTOR')")
 	public String removeAppointment(@PathVariable int appointId) {
 		Appointment apmnt = apmntRepository.findById(appointId).get();
 		apmnt.setStatus(AppointmentStatus.REJECTED);
@@ -72,7 +72,7 @@ public class AppointmentController {
 
 
 	@GetMapping("/rejectAll")
-	@PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
+	@PreAuthorize("hasAuthority('ROLE_DOCTOR')")
 	public String rejectAll() {
 		apmntRepository.findAll().stream().filter(appointment -> appointment.getStatus().equals(AppointmentStatus.PENDING)).forEach(appointment -> {
 			appointment.setStatus(AppointmentStatus.REJECTED);
