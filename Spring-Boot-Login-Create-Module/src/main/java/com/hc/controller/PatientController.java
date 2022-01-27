@@ -25,63 +25,65 @@ import com.hc.repository.PatientRepository;
 @RequestMapping("/patient")
 public class PatientController {
 
-    @Autowired
-    private PatientRepository repository;
+	@Autowired
+	private PatientRepository repository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
-    @PostMapping("/signup")
-    public String signUp(@RequestBody Patient patient) {
-    	patient.setRoles(PatientConstant.DEFAULT_ROLE);//Patient
-        String encryptedPwd = passwordEncoder.encode(patient.getPassword());
-        patient.setPassword(encryptedPwd);
-        repository.save(patient);
-        return "Hi " + patient.getUserName() + " welcome!";
-    }
-    //If loggedin user is NURSE -> NURSE OR DOCTOR
-    //If loggedin user is DOCTOR -> DOCTOR
+	@PostMapping("/signup")
+	public String signUp(@RequestBody Patient patient) {
+		patient.setRoles(PatientConstant.DEFAULT_ROLE);//Patient
+		String encryptedPwd = passwordEncoder.encode(patient.getPassword());
+		patient.setPassword(encryptedPwd);
+		repository.save(patient);
+		return "Hi " + patient.getUserName() + " welcome!";
+	}
 
-    @GetMapping("/access/{userId}/{patientRole}")
-    @PreAuthorize("hasAuthority('ROLE_NURSE') or hasAuthority('ROLE_DOCTOR')")
-    public String giveAccessToUser(@PathVariable int userId, @PathVariable String patientRole, Principal principal) {
-        Patient patient = repository.findById(userId).get();
-        List<String> activeRoles = getRolesByLoggedInUser(principal);
-        String newRole = "";
-        if (activeRoles.contains(patientRole)) {
-            newRole = patient.getRoles() + "," + patientRole;
-            patient.setRoles(newRole);
-        }
-        repository.save(patient);
-        return "Hi " + patient.getUserName() + " New Role assign to you by " + principal.getName();
-    }
+	@GetMapping("/access/{userId}/{patientRole}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public String giveAccessToUser(@PathVariable int userId, @PathVariable String patientRole, Principal principal) {
+		Patient patient = repository.findById(userId).get();
+		List<String> activeRoles = getRolesByLoggedInUser(principal);
+		String newRole = "";
+		if (activeRoles.contains(patientRole)) {
+			newRole = patient.getRoles() + "," + patientRole;
+			patient.setRoles(newRole);
+		}
+		repository.save(patient);
+		return "Hi " + patient.getUserName() + " New Role assign to you by " + principal.getName();
+	}
 
-    @GetMapping("/allUser")
-    @Secured("ROLE_NURSE")
-    @PreAuthorize("hasAuthority('ROLE_NURSE')")
-    public List<Patient> loadUsers() {
-        return repository.findAll();
-    }
+	@GetMapping("/allUser")
+	@Secured("ROLE_ADMIN")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public List<Patient> loadUsers() {
+		return repository.findAll();
+	}
 
-    @GetMapping("/test")
-    @PreAuthorize("hasAuthority('ROLE_PATIENT')")
-    public String testUserAccess() {
-        return "Patient can only access this !";
-    }
+	@GetMapping("/test")
+	@PreAuthorize("hasAuthority('ROLE_PATIENT')")
+	public String testUserAccess() {
+		return "Patient can only access this !";
+	}
 
-    private List<String> getRolesByLoggedInUser(Principal principal) {
-        String roles = getLoggedInUser(principal).getRoles();
-        List<String> assignRoles = Arrays.stream(roles.split(",")).collect(Collectors.toList());
-        if (assignRoles.contains("ROLE_NURSE")) {
-            return Arrays.stream(PatientConstant.NURSE_ACCESS).collect(Collectors.toList());
-        }
-        if (assignRoles.contains("ROLE_DOCTOR")) {
-            return Arrays.stream(PatientConstant.DOCTOR_ACCESS).collect(Collectors.toList());
-        }
-        return Collections.emptyList();
-    }
+	private List<String> getRolesByLoggedInUser(Principal principal) {
+		String roles = getLoggedInUser(principal).getRoles();
+		List<String> assignRoles = Arrays.stream(roles.split(",")).collect(Collectors.toList());
+		if (assignRoles.contains("ROLE_NURSE")) {
+			return Arrays.stream(PatientConstant.NURSE_ACCESS).collect(Collectors.toList());
+		}
+		if (assignRoles.contains("ROLE_DOCTOR")) {
+			return Arrays.stream(PatientConstant.DOCTOR_ACCESS).collect(Collectors.toList());
+		}
+		if (assignRoles.contains("ROLE_ADMIN")) {
+			return Arrays.stream(PatientConstant.ADMIN_ACCESS).collect(Collectors.toList());
+		}
 
-    private Patient getLoggedInUser(Principal principal) {
-        return repository.findByUserName(principal.getName()).get();
-    }
+		return Collections.emptyList();
+	}
+
+	private Patient getLoggedInUser(Principal principal) {
+		return repository.findByUserName(principal.getName()).get();
+	}
 }

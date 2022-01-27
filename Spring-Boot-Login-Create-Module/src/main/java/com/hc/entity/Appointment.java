@@ -1,5 +1,7 @@
 package com.hc.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,13 +21,16 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Appointment {
-    @Id
-    @GeneratedValue
-    private int appointmentId;
-    private String disease;
-    private String description;
-    private String userName;
-    @Enumerated(EnumType.STRING)
-    private AppointmentStatus status;
+
+	@Id
+	@GeneratedValue
+	private int appointmentId;
+	private String disease;
+	private String description;
+	private String regTime;
+	private String userName;
+	private LocalDateTime appointmentDateAndTime;
+	@Enumerated(EnumType.STRING)
+	private AppointmentStatus status;
 
 }

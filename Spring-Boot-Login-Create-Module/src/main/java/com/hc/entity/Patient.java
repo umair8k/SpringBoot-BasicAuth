@@ -17,11 +17,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PATIENT_AUTHENTICATION_TBL")
 public class Patient {
-    @Id
-    @GeneratedValue
-    private int id;
-    private String userName;
-    private String password;
-    private boolean active;
-    private String roles;//ROLE_PATIENT,ROLE_NURSE
+	@Id
+	@GeneratedValue
+	private int id;
+	private String userName;
+	private String password;
+	private boolean active;
+	private String roles;//ROLE_PATIENT,ROLE_NURSE
 }
