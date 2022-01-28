@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hc.common.PatientConstant;
+import com.hc.entity.Appointment;
 import com.hc.entity.Patient;
+import com.hc.repository.AppointmentRepository;
 import com.hc.repository.PatientRepository;
 
 @RestController
@@ -27,6 +29,8 @@ public class PatientController {
 
 	@Autowired
 	private PatientRepository repository;
+	@Autowired
+	private AppointmentRepository apmntRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -63,8 +67,10 @@ public class PatientController {
 
 	@GetMapping("/test")
 	@PreAuthorize("hasAuthority('ROLE_PATIENT')")
-	public String testUserAccess() {
-		return "Patient can only access this !";
+	public String test() {
+	
+		return "User can acces this url ";
+			
 	}
 
 	private List<String> getRolesByLoggedInUser(Principal principal) {
