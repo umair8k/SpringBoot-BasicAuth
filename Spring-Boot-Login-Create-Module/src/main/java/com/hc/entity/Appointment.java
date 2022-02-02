@@ -8,16 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "APPOINTMENTS")
-@Data
+@Table(name = "APPOINTMENTS_RECORD")
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Appointment {
     @Id
     @GeneratedValue
@@ -27,5 +28,14 @@ public class Appointment {
     private String userName;
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
+    
+    
+	@Override
+	public String toString() {
+		return "Appointment (Child)[appointmentId=" + appointmentId + ", disease=" + disease + ", description=" + description
+				+ ", userName=" + userName + ", status=" + status + "]";
+	}
+    
+    
 
 }
