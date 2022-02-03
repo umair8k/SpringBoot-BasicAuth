@@ -14,13 +14,13 @@ import com.hc.repository.PatientRepository;
 @Service
 public class PatientDetailsService implements UserDetailsService {
 
-    @Autowired
-    private PatientRepository repository;
+	@Autowired
+	private PatientRepository repository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Patient> patient = repository.findByUserName(username);
-        return patient.map(PatientDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException(username + " Not Found"));
-    }
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<Patient> patient = repository.findByUserName(username);
+		return patient.map(PatientDetails::new)
+				.orElseThrow(() -> new UsernameNotFoundException(username + " Not Found"));
+	}
 }

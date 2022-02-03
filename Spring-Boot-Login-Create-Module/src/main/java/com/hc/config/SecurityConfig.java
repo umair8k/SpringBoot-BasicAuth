@@ -17,26 +17,26 @@ import com.hc.service.PatientDetailsService;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private PatientDetailsService patientDetailsService;
+	@Autowired
+	private PatientDetailsService patientDetailsService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(patientDetailsService);
-        /*.inMemoryAuthentication()
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(patientDetailsService);
+		/*.inMemoryAuthentication()
         .withUser("user").password("password").roles("USER");*/}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-    	/*  http.httpBasic().disable();*/
-        http.csrf().disable();
-        http.authorizeRequests().antMatchers("/patient/signup").permitAll().and().authorizeRequests()
-                .antMatchers("/patient/**","/appointment/**").authenticated().and().httpBasic();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		/*  http.httpBasic().disable();*/
+		http.csrf().disable();
+		http.authorizeRequests().antMatchers("/patient/signup").permitAll().and().authorizeRequests()
+		.antMatchers("/patient/**","/appointment/**").authenticated().and().httpBasic();
+	}
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 }
